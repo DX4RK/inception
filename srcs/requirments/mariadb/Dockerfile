@@ -8,5 +8,6 @@ COPY tools/init.sh /
 
 RUN chmod +x init.sh
 
+EXPOSE 3306
 
-CMD ["/init.sh"]
+CMD ["sh", "/init.sh"]

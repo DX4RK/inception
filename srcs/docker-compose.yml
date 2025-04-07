@@ -1,4 +1,3 @@
-version: '3'
 
 services:
   nginx:
@@ -8,7 +7,8 @@ services:
     ports:
       - "443:443"
     volumes:
-      - nginx:/etc/nginx/
+      - ./requirments/nginx/conf:/etc/nginx/conf.d
+      - ./requirments/nginx/certificates:/etc/ssl/certs
     depends_on:
       - wordpress
     env_file:
