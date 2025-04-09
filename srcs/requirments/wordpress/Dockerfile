@@ -1,7 +1,7 @@
 FROM debian:bullseye
 
 RUN apt update -y && apt upgrade -y
-RUN apt-get install php7.3 php-fpm php-mysql wget bash -y
+RUN apt-get install php-fpm7.3 php-mysql wget bash -y
 
 RUN wget https://fr.wordpress.org/wordpress-6.7-fr_FR.tar.gz -P /var/www/html
 RUN cd /var/www/html/ && tar -xzf wordpress-6.7-fr_FR.tar.gz && rm wordpress-6.7-fr_FR.tar.gz
