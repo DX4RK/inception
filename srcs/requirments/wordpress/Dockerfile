@@ -1,7 +1,7 @@
 FROM debian:bullseye
 
 RUN apt update -y && apt upgrade -y
-RUN apt-get install php7.3 php7.3-fpm php7.3-mysql wget bash -y
+RUN apt-get install php7.4 php-fpm php-mysql wget bash -y
 
 RUN wget https://fr.wordpress.org/wordpress-6.7-fr_FR.tar.gz -P /var/www/html
 RUN cd /var/www/html/ && tar -xzf wordpress-6.7-fr_FR.tar.gz && rm wordpress-6.7-fr_FR.tar.gz
@@ -11,7 +11,7 @@ RUN chmod +x wp-cli.phar
 RUN mv wp-cli.phar /usr/local/bin/wp
 
 #COPY conf/wp-config.php /var/www/html/wordpress
-COPY conf/www.conf /etc/php/7.3/fpm/pool.d
+COPY conf/www.conf /etc/php/7.4/fpm/pool.d
 COPY tools/auto_config.sh /
 
 RUN mkdir /run/php
@@ -27,4 +27,4 @@ ENTRYPOINT ["/auto_config.sh"]
 
 EXPOSE 9000
 
-CMD ["/usr/sbin/php-fpm7.3", "-F"]
+CMD ["/usr/sbin/php-fpm7.4", "-F"]
