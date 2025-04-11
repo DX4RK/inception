@@ -7,8 +7,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - ./requirments/nginx/conf:/etc/nginx/conf.d
-      - ./requirments/nginx/certificates:/etc/ssl/certs
+      - wordpress:/var/wwww/wordpress
     depends_on:
       - wordpress
     env_file:
@@ -40,9 +39,18 @@ services:
     restart: always
 
 volumes:
-  nginx:
   wordpress:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/nolan/Data/wordpress'
   mariadb:
+    driver: 'local'
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/nolan/Data/mariadb'
 
 networks:
   inception:

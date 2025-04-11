@@ -1,29 +1,38 @@
 FROM debian:bullseye
 
 RUN apt update -y && apt upgrade -y
-RUN apt-get install php7.4 php-fpm php-mysql wget bash -y
+RUN apt-get -y install
+	php7.4 \
+	php-fpm \
+	php-mysql \
+	php-cgi \
+	php-pdo \
+	php-gd php-cli \
+	php-mbstring \
+	redis \
+	php-redis \
+	wget \
+	curl \
+	bash
 
-RUN wget https://fr.wordpress.org/wordpress-6.7-fr_FR.tar.gz -P /var/www/html
-RUN cd /var/www/html/ && tar -xzf wordpress-6.7-fr_FR.tar.gz && rm wordpress-6.7-fr_FR.tar.gz
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+	&& chmod +x wp-cli.phar \
+	&& mv wp-cli.phar /usr/local/bin/wp
 
-RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-RUN chmod +x wp-cli.phar
-RUN mv wp-cli.phar /usr/local/bin/wp
-
-#COPY conf/wp-config.php /var/www/html/wordpress
 COPY conf/www.conf /etc/php/7.4/fpm/pool.d
-COPY tools/auto_config.sh /
+COPY tools/auto_start.sh /usr/local/bin/
 
 RUN mkdir /run/php
 
-RUN chmod +x auto_config.sh
+RUN chmod +x auto_start.sh
 
 RUN chown -R www-data:www-data /run/php
 RUN chown -R www-data:www-data /var/www/html/wordpress
 RUN chown -R www-data:www-data /var/www/html
 RUN chmod -R 755 /var/www/html
 
-ENTRYPOINT ["/auto_config.sh"]
+ENTRYPOINT ["/auto_start.sh"]
+WORKDIR /var/www/html/
 
 EXPOSE 9000
 
