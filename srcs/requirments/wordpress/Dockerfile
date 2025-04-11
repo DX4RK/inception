@@ -1,19 +1,12 @@
 FROM debian:bullseye
 
 RUN apt update -y && apt upgrade -y
-RUN apt-get -y install \
-	php7.4 \
-	php-fpm \
-	php-mysql \
-	php-cgi \
-	php-pdo \
-	php-gd php-cli \
-	php-mbstring \
-	redis \
-	php-redis \
-	wget \
-	curl \
-	bash
+RUN apt-get install -y php7.3\
+	php-fpm\
+	php-mysql\
+	mariadb-client\
+	bash \
+	curl
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
 	&& chmod +x wp-cli.phar \
@@ -23,11 +16,9 @@ COPY conf/www.conf /etc/php/7.4/fpm/pool.d
 
 RUN mkdir /run/php
 
-WORKDIR /var/www/html/
-
-COPY tools/auto_start.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/auto_start.sh
-ENTRYPOINT ["/usr/local/bin/auto_start.sh"]
+COPY tools/auto_start.sh /
+RUN chmod +x auto_start.sh
+ENTRYPOINT ["/auto_start.sh"]
 
 EXPOSE 9000
 
