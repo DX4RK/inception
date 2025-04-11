@@ -7,7 +7,7 @@ server {
 
     ssl_protocols TLSv1.2 TLSv1.3;
 
-    root /var/www/html/wordpress;
+    root /var/www/html;
     index index.php index.html;
     server_name noldiane.42.fr;
 

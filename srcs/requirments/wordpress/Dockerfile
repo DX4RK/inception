@@ -1,7 +1,7 @@
 FROM debian:bullseye
 
 RUN apt update -y && apt upgrade -y
-RUN apt-get -y install
+RUN apt-get -y install \
 	php7.4 \
 	php-fpm \
 	php-mysql \
@@ -20,19 +20,14 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 	&& mv wp-cli.phar /usr/local/bin/wp
 
 COPY conf/www.conf /etc/php/7.4/fpm/pool.d
-COPY tools/auto_start.sh /usr/local/bin/
 
 RUN mkdir /run/php
 
-RUN chmod +x auto_start.sh
-
-RUN chown -R www-data:www-data /run/php
-RUN chown -R www-data:www-data /var/www/html/wordpress
-RUN chown -R www-data:www-data /var/www/html
-RUN chmod -R 755 /var/www/html
-
-ENTRYPOINT ["/auto_start.sh"]
 WORKDIR /var/www/html/
+
+COPY tools/auto_start.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/auto_start.sh
+ENTRYPOINT ["/usr/local/bin/auto_start.sh"]
 
 EXPOSE 9000
 
